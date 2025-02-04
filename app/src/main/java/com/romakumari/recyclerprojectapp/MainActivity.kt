@@ -16,18 +16,23 @@ class MainActivity : AppCompatActivity(),RecyclerAdapter.buttonclick {
         lateinit var binding: ActivityMainBinding
         var studentlist= arrayListOf<student>()
         lateinit var recyclerAdapter: RecyclerAdapter
+        var Noteslist= arrayListOf<NotesEntity>()
+        lateinit var notesDB: NotesDB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        recyclerAdapter = RecyclerAdapter(studentlist, this)
+        notesDB= NotesDB.getDatabase(this)
+        recyclerAdapter = RecyclerAdapter(Noteslist, this)
         binding.recycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
         binding.recycler.adapter = recyclerAdapter
-        studentlist.add(student("roma", 4,6))
-        studentlist.add(student("shruti", 8,9))
-        studentlist.add(student("ridham", 4,9))
-        studentlist.add(student("sandhaya", 4,4))
+//        notesDB.notesdao().insertNotes(NotesEntity(title = "Roma", description = "one"))
+//        notesDB.notesdao().insertNotes(NotesEntity(title = "shruti", description = "two" ))
+//        notesDB.notesdao().insertNotes(NotesEntity(title = "ridham", description = "four"))
+//        notesDB.notesdao().insertNotes(NotesEntity(title = "sandhaya", description = "five"))
+        getNotes()
         binding.fab.setOnClickListener {
             var dialog = Dialog(this)
             var dialogbinding = CustomlayoutBinding.inflate(layoutInflater)
@@ -38,18 +43,22 @@ class MainActivity : AppCompatActivity(),RecyclerAdapter.buttonclick {
             )
             dialogbinding.btnupdate.setOnClickListener {
                 if (dialogbinding.etname.text.toString().isNullOrEmpty()) {
-                    dialogbinding.etname.error = "enter name"
+                    dialogbinding.etname.error = "enter title"
                 } else if (dialogbinding.etrollno.text.toString().isNullOrEmpty()) {
-                    dialogbinding.etrollno.error = "enter rollno"
+                    dialogbinding.etrollno.error = "enter description"
                 }
-                else if (dialogbinding.etclass.text.toString().isNullOrEmpty()) {
-                    dialogbinding.etclass.error = "enter class"
-                }
+//                else if (dialogbinding.etclass.text.toString().isNullOrEmpty()) {
+//                    dialogbinding.etclass.error = "enter class"
+//                }
                 else {
-                    studentlist.add(student(name = dialogbinding.etname.text.toString(),
-                        rollno = dialogbinding.etrollno.text.toString().toInt(),
-                        myclass = dialogbinding.etclass.text.toString().toInt()
-                        ))
+                    notesDB.notesdao()
+                        .insertNotes(
+                            NotesEntity(
+                                title=   dialogbinding.etname.text.toString(),
+                                description =  dialogbinding.etrollno.text.toString()
+                            )
+                        )
+                    getNotes()
                     recyclerAdapter.notifyDataSetChanged()
                     dialog.dismiss()
 
@@ -61,7 +70,9 @@ class MainActivity : AppCompatActivity(),RecyclerAdapter.buttonclick {
 
 
     override fun deleteclick(position: Int) {
-         studentlist.removeAt(position)
+//         studentlist.removeAt(position)
+        notesDB.notesdao().deleteNotes(Noteslist[position])
+        getNotes()
          recyclerAdapter.notifyDataSetChanged()
     }
 
@@ -73,28 +84,30 @@ class MainActivity : AppCompatActivity(),RecyclerAdapter.buttonclick {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        dialogbinding.etname.setText(studentlist[position].name)
-        dialogbinding.etrollno.setText(studentlist[position].rollno.toString())
-        dialogbinding.etclass.setText(studentlist[position].myclass.toString())
+        dialogbinding.etname.setText(Noteslist[position].title)
+        dialogbinding.etrollno.setText(Noteslist[position].description.toString())
+//        dialogbinding.etclass.setText(studentlist[position].myclass.toString())
         dialogbinding.btnupdate.setOnClickListener {
             if (dialogbinding.etname.text.toString().isNullOrEmpty()) {
-                dialogbinding.etname.error = "enter name"
+                dialogbinding.etname.error = "enter title"
             } else if (dialogbinding.etrollno.text.toString().isNullOrEmpty()) {
-                dialogbinding.etrollno.error = "enter rollno"
+                dialogbinding.etrollno.error = "enter description"
             }
-            else if (dialogbinding.etclass.text.toString().isNullOrEmpty()) {
-                dialogbinding.etclass.error = "enter class"
-            }
+
             else {
-                studentlist.set(position,student(name = dialogbinding.etname.text.toString(),
-                    rollno = dialogbinding.etrollno.text.toString().toInt(),
-                    myclass = dialogbinding.etclass.text.toString().toInt()
-                ))
+
+                notesDB.notesdao().updateNotes(NotesEntity(id=Noteslist[position].id,title=dialogbinding.etname.text.toString(),
+                    description=  dialogbinding.etrollno.text.toString()))
+                getNotes()
                 recyclerAdapter.notifyDataSetChanged()
                 dialog.dismiss()
 
             }
         }
         dialog.show()
+    }
+    private fun getNotes(){
+        Noteslist.clear()
+        Noteslist.addAll(notesDB.notesdao().getNotes())
     }
     }

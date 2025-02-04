@@ -8,7 +8,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="title"
         android:textSize="30dp"
         android:inputType="textPersonName"
         android:id="@+id/etname"
@@ -17,22 +17,21 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Rollno"
+        android:hint="description"
         android:textSize="30dp"
-        android:inputType="number"
         android:layout_margin="10dp"
         android:id="@+id/etrollno"
         app:layout_constraintTop_toTopOf="parent"
         />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="class"
-        android:textSize="30dp"
-        android:inputType="number"
-        android:layout_margin="10dp"
-        android:id="@+id/etclass"
-        />
+<!--    <EditText-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="class"-->
+<!--        android:textSize="30dp"-->
+<!--        android:inputType="number"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:id="@+id/etclass"-->
+<!--        />-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

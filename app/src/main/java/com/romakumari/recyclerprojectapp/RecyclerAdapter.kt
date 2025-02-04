@@ -8,11 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class RecyclerAdapter(var list: ArrayList<student>, var ButtonInterface:buttonclick) :RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class RecyclerAdapter(var list: ArrayList<NotesEntity>, var ButtonInterface:buttonclick) :RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     class ViewHolder(var view:View) :RecyclerView.ViewHolder(view){
         var Name=view.findViewById<TextView>(R.id.tvname)
         var rollno=view.findViewById<TextView>(R.id.tvrollno)
-        var myclass=view.findViewById<TextView>(R.id.tvclass)
+//        var myclass=view.findViewById<TextView>(R.id.tvclass)
         var delete=view.findViewById<Button>(R.id.btndelete)
         var update=view.findViewById<Button>(R.id.btnupdate)
     }
@@ -27,9 +27,9 @@ class RecyclerAdapter(var list: ArrayList<student>, var ButtonInterface:buttoncl
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
        holder.apply {
-           Name.setText(list[position].name)
-           rollno.setText(list[position].rollno.toString())
-           myclass.setText(list[position].myclass.toString())
+           Name.setText(list[position].title)
+           rollno.setText(list[position].description.toString())
+//           myclass.setText(list[position].myclass.toString())
           delete.setOnClickListener {
              ButtonInterface.deleteclick(position)
          }
@@ -51,4 +51,4 @@ class RecyclerAdapter(var list: ArrayList<student>, var ButtonInterface:buttoncl
     }
 }
 
-data class student(var name:String = " " ,var rollno:Int?=0, var myclass:Int?=0)
+data class student(var name:String = " " ,var rollno:String="" )
