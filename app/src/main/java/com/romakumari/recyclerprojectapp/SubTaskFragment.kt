@@ -61,7 +61,7 @@ class SubTaskFragment : Fragment(),SubtaskAdapter.subTaskInterface {
         adapter = SubtaskAdapter(subtasklist, this)
         binding.recyaclersubtask.layoutManager =
             LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false)
-
+         getsubtask()
         binding.recyaclersubtask.adapter = adapter
         binding.fab.setOnClickListener {
             val dialog = Dialog(requireContext())
@@ -91,8 +91,6 @@ class SubTaskFragment : Fragment(),SubtaskAdapter.subTaskInterface {
         dialog.window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
         dialogBinding.taskName.setText(subtasklist[position].subtaskName)
 
-        dialogBinding.btnAdd.setText("Update")
-
         dialogBinding.btnAdd.setOnClickListener {
             if (dialogBinding.taskName.text.isNullOrEmpty()) {
                 dialogBinding.taskName.error = "Enter Todo name"
@@ -108,11 +106,37 @@ class SubTaskFragment : Fragment(),SubtaskAdapter.subTaskInterface {
 
     override fun delete(subTaskEntity: SubTaskEntity, position: Int) {
         notesDB.notesdao().deleteSub(subtasklist[position])
+        getsubtask()
         adapter.notifyDataSetChanged()
     }
 
+    override fun update(subTaskEntity: SubTaskEntity, position: Int) {
+        val dialog = Dialog(requireContext())
+        val dialogBinding = MainTaskItemBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
+        dialogBinding.taskName.setText(subtasklist[position].subtaskName)
+
+        dialogBinding.btnAdd.setText("Update")
+
+        dialogBinding.btnAdd.setOnClickListener {
+            if (dialogBinding.taskName.text.isNullOrEmpty()) {
+                dialogBinding.taskName.error = "Enter Todo name"
+            } else {
+                notesDB.notesdao().updateSub(SubTaskEntity(subtaskId = subtasklist[position].subtaskId, subtaskName = dialogBinding.taskName.text.toString(), taskOwnerId = taskId.toInt()))
+                getsubtask()
+                dialog.dismiss()
+            }
+        }
+        adapter.notifyDataSetChanged()
+        dialog.show()
+    }
+
+
     override fun onTaskChecked(subTaskEntity: SubTaskEntity, position: Int) {
+
         notesDB.notesdao().updateSub(SubTaskEntity(subtaskId = subtasklist[position].subtaskId, taskOwnerId = taskId.toInt(), subtaskName = subtasklist[position].subtaskName, isCompleted = subtasklist[position].isCompleted))
+        getsubtask()
         adapter.notifyDataSetChanged()
     }
     fun getsubtask(){

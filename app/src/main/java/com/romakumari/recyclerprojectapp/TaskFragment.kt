@@ -142,8 +142,11 @@ class TaskFragment : Fragment() ,RecyclerAdapter.buttonclick{
                 getTodo()
                 dialog.dismiss()
             }
+            dialog.show()
         }
+
+
         adapter.notifyDataSetChanged()
-        dialog.show()
     }
+
     }

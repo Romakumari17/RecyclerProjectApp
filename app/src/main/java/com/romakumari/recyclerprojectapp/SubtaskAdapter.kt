@@ -14,6 +14,7 @@ class SubtaskAdapter (val list :ArrayList<SubTaskEntity>, val subinterface:subTa
         class ViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
             val name = view.findViewById<TextView>(R.id.subtaskName)
             val delete = view.findViewById<ImageView>(R.id.imageDelete)
+            val update = view.findViewById<ImageView>(R.id.imageUpdate)
             val checkbox = view.findViewById<MaterialCheckBox>(R.id.cbtask)
 
         }
@@ -52,31 +53,32 @@ class SubtaskAdapter (val list :ArrayList<SubTaskEntity>, val subinterface:subTa
                 }
 
             }
+
+            holder.itemView.setOnClickListener {
+                subinterface.onAdd(subTask, position)
+            }
+
+
+
             holder.delete.setOnClickListener {
                 subinterface.delete(subTask, position)
             }
-
-            holder.itemView.setOnClickListener {
-                subinterface.onAdd(subTask, position)
+            holder.update.setOnClickListener {
+                subinterface.update(subTask, position)
             }
 
 
 
-        holder.delete.setOnClickListener {
-                subinterface.delete(subTask, position)
-            }
-
-
-            holder.itemView.setOnClickListener {
-                subinterface.onAdd(subTask, position)
-            }
         }
 
 
         interface subTaskInterface{
             fun onAdd(subTaskEntity: SubTaskEntity,position: Int)
             fun delete(subTaskEntity: SubTaskEntity,position: Int)
+            fun update(subTaskEntity: SubTaskEntity,position: Int)
+
             fun onTaskChecked(subTaskEntity: SubTaskEntity, position: Int)
         }
+
 
     }

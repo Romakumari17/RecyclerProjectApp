@@ -11,8 +11,8 @@ import kotlin.collections.ArrayList
 class RecyclerAdapter(var list: ArrayList<NotesEntity>, var ButtonInterface:buttonclick) :RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     class ViewHolder(var view:View) :RecyclerView.ViewHolder(view){
         var Name=view.findViewById<TextView>(R.id.taskName)
-        var delete=view.findViewById<Button>(R.id.btnUpdate)
-        var update=view.findViewById<Button>(R.id.btnDelete)
+        var update=view.findViewById<Button>(R.id.btnUpdate)
+        var delete=view.findViewById<Button>(R.id.btnDelete)
     }
 
 
@@ -29,11 +29,12 @@ class RecyclerAdapter(var list: ArrayList<NotesEntity>, var ButtonInterface:butt
            itemView.setOnClickListener {
                ButtonInterface.onShowSubtask(list[position],position)
            }
-          delete.setOnClickListener {
-             ButtonInterface.deleteclick(list[position],position)
-         }
+
            update.setOnClickListener {
                ButtonInterface.updateclick(list[position],position)
+           }
+           delete.setOnClickListener {
+               ButtonInterface.deleteclick(list[position],position)
            }
 
 
