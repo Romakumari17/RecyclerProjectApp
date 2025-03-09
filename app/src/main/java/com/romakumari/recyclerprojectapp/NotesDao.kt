@@ -10,10 +10,20 @@ interface NotesDao {
     @Insert
     fun  insertNotes(notesData: NotesEntity)
 
-    @Query("Select* from NotesEntity")
-    fun getNotes() : List<NotesEntity>
+    @Query("Select* from tabletask ")
+    fun getAlltask() : List<NotesEntity>
     @Delete
     fun deleteNotes(notesData:NotesEntity)
     @Update
     fun updateNotes(notesData: NotesEntity)
+    @Insert
+    fun insertSub(subTaskEntity: SubTaskEntity)
+    @Query("SELECT * FROM subtasktable where taskOwnerId = :taskOwnerId")
+    fun getSub(taskOwnerId : Int): List<SubTaskEntity>
+    @Update
+    fun updateSub(subTaskEntity: SubTaskEntity)
+    @Delete
+    fun deleteSub(subTaskEntity: SubTaskEntity)
+
+
 }

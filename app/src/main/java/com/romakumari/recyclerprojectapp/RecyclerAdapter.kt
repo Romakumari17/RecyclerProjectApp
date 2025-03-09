@@ -6,35 +6,34 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 class RecyclerAdapter(var list: ArrayList<NotesEntity>, var ButtonInterface:buttonclick) :RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     class ViewHolder(var view:View) :RecyclerView.ViewHolder(view){
-        var Name=view.findViewById<TextView>(R.id.tvname)
-        var rollno=view.findViewById<TextView>(R.id.tvrollno)
-//        var myclass=view.findViewById<TextView>(R.id.tvclass)
-        var delete=view.findViewById<Button>(R.id.btndelete)
-        var update=view.findViewById<Button>(R.id.btnupdate)
+        var Name=view.findViewById<TextView>(R.id.taskName)
+        var delete=view.findViewById<Button>(R.id.btnUpdate)
+        var update=view.findViewById<Button>(R.id.btnDelete)
     }
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         var view= LayoutInflater.from(parent.context)
-            .inflate(R.layout.layoutitem,parent,false)
+            .inflate(R.layout.main_task_layout,parent,false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
        holder.apply {
-           Name.setText(list[position].title)
-           rollno.setText(list[position].description.toString())
-//           myclass.setText(list[position].myclass.toString())
+           Name.setText(list[position].taskdescription)
+           itemView.setOnClickListener {
+               ButtonInterface.onShowSubtask(list[position],position)
+           }
           delete.setOnClickListener {
-             ButtonInterface.deleteclick(position)
+             ButtonInterface.deleteclick(list[position],position)
          }
            update.setOnClickListener {
-               ButtonInterface.updateclick(position)
+               ButtonInterface.updateclick(list[position],position)
            }
 
 
@@ -46,8 +45,9 @@ class RecyclerAdapter(var list: ArrayList<NotesEntity>, var ButtonInterface:butt
     }
 
     interface buttonclick{
-        fun deleteclick(position: Int)
-        fun updateclick(position: Int)
+        fun onShowSubtask(notesEntity: NotesEntity,position: Int)
+        fun deleteclick(notesEntity: NotesEntity,position: Int)
+        fun updateclick(notesEntity: NotesEntity,position: Int)
     }
 }
 
